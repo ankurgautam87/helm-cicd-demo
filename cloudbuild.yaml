@@ -1,0 +1,38 @@
+substitutions:
+  _REGION: us-central1
+steps:
+- name: 'gcr.io/k8s-skaffold/skaffold'
+  entrypoint: 'sh'
+  args:
+  - -xe
+  - -c
+  - |
+    # Build and push images
+    skaffold build --file-output=/workspace/artifacts.json \
+                   --default-repo=${_REGION}-docker.pkg.dev/$PROJECT_ID/helm-cicd-repo \
+                   --push=true
+- name: 'google/cloud-sdk:latest'
+  entrypoint: 'sh'
+  args:
+  - -xe
+  - -c
+  - |
+    gcloud config set deploy/region ${_REGION}
+    sed -i s/PROJECT_ID/$PROJECT_ID/g deploy/*
+    gcloud deploy apply --file deploy/pipeline.yaml
+    gcloud deploy apply --file deploy/dev.yaml
+    gcloud deploy apply --file deploy/staging.yaml
+    gcloud deploy apply --file deploy/prod.yaml
+    gcloud deploy releases create rel-${SHORT_SHA} \
+                        --delivery-pipeline helm-cicd-pipeline \
+                        --description "$(git log -1  --pretty='%s')" \
+                        --build-artifacts /workspace/artifacts.json \
+                        --annotations "commit_ui=https://source.cloud.google.com/$PROJECT_ID/helm-cicd-demo/+/$COMMIT_SHA"
+artifacts:
+  objects:
+    location: 'gs://$PROJECT_ID-gceme-artifacts/'
+    paths:
+    - '/workspace/artifacts.json'
+options:
+  machineType: E2_HIGHCPU_8
+timeout: 3600s
