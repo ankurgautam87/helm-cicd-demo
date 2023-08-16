@@ -1,0 +1,9 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: staging
+  annotations: {}
+  labels: {}
+description: staging
+gke:
+  cluster: projects/utopian-bonito-347816/locations/us-central1-c/clusters/helm-cd-testing-stg

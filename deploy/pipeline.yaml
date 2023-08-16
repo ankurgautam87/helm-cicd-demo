@@ -1,0 +1,18 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: helm-cicd-pipeline
+  labels:
+    app: helm-cicd
+description: helm-cicd delivery pipeline
+serialPipeline:
+  stages:
+  - targetId: dev
+    profiles:
+    - dev
+  - targetId: staging
+    profiles:
+    - staging
+  - targetId: prod
+    profiles:
+    - prod
