@@ -1,0 +1,22 @@
+replicaCount: 1
+workloadName: dev-application
+image:
+  repository: us-central1-docker.pkg.dev/utopian-bonito-347816/helm-cicd-repo/helm-cicd-image
+  tag: latest
+  pullPolicy: IfNotPresent
+monitoring: false
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 1
+    memory: 128Mi
+service:
+  type: LoadBalancer
+  port: 80
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
