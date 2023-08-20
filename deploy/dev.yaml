@@ -6,4 +6,4 @@ metadata:
   labels: {}
 description: dev
 gke:
-  cluster: projects/utopian-bonito-347816/locations/us-central1-c/clusters/helm-cd-testing-dev
+  cluster: projects/<project-id>/locations/<zone>/clusters/helm-cd-testing-dev
