@@ -7,4 +7,4 @@ metadata:
 description: prod
 requireApproval: true
 gke:
-  cluster: projects/utopian-bonito-347816/locations/us-central1-c/clusters/helm-cd-testing-prd
+  cluster: projects/<project-id>/locations/<zone>/clusters/helm-cd-testing-prd
